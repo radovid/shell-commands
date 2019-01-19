@@ -1,4 +1,4 @@
-# go-command
+## go-command
 
 The `go` command aims to get directly to a survey directory only by the directory name – SN or Mac #, for example. 
 The full path (/home/gmi/v2/…) doesn’t need to be specified. 
@@ -20,7 +20,7 @@ When a path is specified or if going to a temp-dir, `go` works as `cd`. So all c
     go ..
 
 
-# Installation
+### Installation
 
 Just copy the *go.sh* file content at the end of your **.bashrc** file. It’s in your home directory (/home/USER). 
 *Ctrl+Alt+H* will display hidden files, in case **.bashrc** is not visible. 
