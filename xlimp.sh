@@ -8,7 +8,7 @@ if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]
 
     echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--new|--omit-blanks]"
 
-    exit 1
+    return 1
 
 fi
 
@@ -50,7 +50,7 @@ else
 
       echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--new|--omit-blanks]"
 
-      exit 2
+      return 2
 
       ;;
 
