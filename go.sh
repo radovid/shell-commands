@@ -29,7 +29,7 @@ elif [ ${#found[@]} -eq 1 ];
    echo "${found[0]}";
    cd "${found[0]}";
 else
-  for line in $(find /home/gmi/v2 -name $sn -type d); do
+  for line in $(find /home/gmi/v2 ! -readable -prune -o -name $sn -a -type d -print); do
     echo "$line";
     cd "$line";
   done;
