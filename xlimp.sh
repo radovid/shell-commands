@@ -6,7 +6,7 @@ if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]
 
     echo "Wrong number of arguments supplied"
 
-    echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--new|--omit-blanks]"
+    echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe|--new|--omit-blanks]"
 
     return 1
 
@@ -43,12 +43,18 @@ else
       third_argument="--omit-blanks"
 
       ;;
+      
+      -u|--unsafe)
+
+      third_argument="--unsafe"
+
+      ;;
 
     *)
 
       echo "Wrong arguments supplied"
 
-      echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--new|--omit-blanks]"
+      echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe|--new|--omit-blanks]"
 
       return 2
 
