@@ -24,11 +24,27 @@ elif [ "$#" -gt 5 ]
 
 fi
 
-dir=$1
+dir=""
 
-langs=$2
+langs=""
 
-shift 2
+
+for arg in $@; do
+
+    if [[ ! $arg =~ ^--?.* && -z $dir ]] ; then
+
+    	dir=$arg
+
+    elif [[ ! $arg =~ ^--?.* && -z $langs ]] ; then
+
+    	langs=$arg
+
+    	break
+
+    fi
+
+done
+
 
 
 
@@ -37,41 +53,45 @@ declare -a args;
 
 for ((i=1; i<=$#; i++)); do 
 
-   case "${!i}" in
+    if [[ "${!i}" =~ ^--?.* ]] ; then
 
-    -d|--dupes)
+      case "${!i}" in
 
-      args[$i]="--dupes"
+        -d|--dupes)
 
-      ;;
+        args+=("--dupes")
 
-    -n|--new)
+        ;;
 
-      args[$i]="--new"
+      -n|--new)
 
-      ;;
+        args+=("--new")
 
-    -o|--omit-blanks)
+        ;;
 
-      args[$i]="--omit-blanks"
+      -o|--omit-blanks)
 
-      ;;
+        args+=("--omit-blanks")
 
-    -u|--unsafe)
+        ;;
 
-      args[$i]="--unsafe"
+      -u|--unsafe)
 
-      ;;
+        args+=("--unsafe")
 
-    *)
+        ;;
 
-      echo "Wrong argument supplied: ${!i}"
+      *)
 
-      echo "Accepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o"
+        echo "Wrong argument supplied: ${!i}"
 
-      ;;
+        echo "Accepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o"
 
-  esac
+        ;;
+
+    esac
+
+  fi
 
 done
 
@@ -107,14 +127,55 @@ do
   done
 
 
+  declare -a foundfiles;
+
+  clear_dir="$dir/"
+
+
+  for line in $(find $dir -maxdepth 2 -regextype posix-extended -regex ".*?/${element}.(xlsx?|XLSX?)"); do
+
+    foundfiles+=("${line/#$clear_dir}")
+
+  done
+
+
+  idf=0
+
+  file_name=""
+
+
+  if [ ${#foundfiles[@]} -gt 1 ];
+
+   then
+
+    for file in ${foundfiles[@]};  do
+
+      idf=$((idf+1));
+
+      echo $idf': ' "${file}";
+
+    done
+
+     read -p "Enter the number of the file to be used: " fileNum
+
+     file_name="${foundfiles[$fileNum-1]}";
+
+  elif [ ${#foundfiles[@]} -eq 1 ];
+
+   then
+
+     file_name="${foundfiles[0]}";
+
+  fi;
+
 
   if [ ${#args[@]} -eq 0 ]; then
 
-      echo "file name = ${element}.xls, language = ${found_language%_*}"
+      echo "file name = ${file_name}, language = ${found_language%_*}"
 
   else
 
-      echo "file name = ${element}.xls, language = ${found_language%_*}, ${args[*]}"
+      echo "file name = ${file_name}, language = ${found_language%_*}, ${args[*]}"
 
   fi
 
@@ -128,11 +189,11 @@ do
 
     if [ ${#args[@]} -eq 0 ]; then
 
-      xlate -l ${found_language%_*} $dir ${element}.xls $dir
+      xlate -l ${found_language%_*} $dir ${file_name} $dir
 
     else
 
-      xlate ${args[*]} -l ${found_language%_*} $dir ${element}.xls $dir
+      xlate ${args[*]} -l ${found_language%_*} $dir ${file_name} $dir
 
     fi
 
