@@ -1,7 +1,7 @@
 function go(){
 declare -- sn=$1;
 
-if [[ $sn =~ .*trans|temp|\.|\/.* ]] ;
+if [[ $sn =~ trans|temp|.*\.|.*\/.* ]] ;
  then
  	cd "$sn";
 else
