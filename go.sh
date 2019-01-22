@@ -36,8 +36,6 @@ else
    declare -a foundm;
    for line in $(find /home/gmi/v2 ! -readable -prune -o -name $sn -a -type d -print); do
      foundm+=("$line");
-     echo "";
-     cd "$line";
    done;
 
    declare -- idm=0;
