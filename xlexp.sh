@@ -26,11 +26,26 @@ elif [ "$#" -gt 5 ]
 fi
 
 
-dir=$1
+dir=""
 
-langs=$2
+langs=""
 
-shift 2
+
+for arg in $@; do
+
+    if [[ ! $arg =~ ^--?.* && -z $dir ]] ; then
+
+    	dir=$arg
+
+    elif [[ ! $arg =~ ^--?.* && -z $langs ]] ; then
+
+    	langs=$arg
+
+    	break
+
+    fi
+
+done
 
 
 survey_file_name="$dir/survey.xml"
@@ -88,35 +103,39 @@ declare -a args;
 
 for ((i=1; i<=$#; i++)); do 
 
-   case "${!i}" in
+   if [[ "${!i}" =~ ^--?.* ]] ; then
 
-     -d|--dupes)
+     case "${!i}" in
 
-       args[$i]="--dupes"
+       -d|--dupes)
 
-       ;;
+         args+=("--dupes")
 
-     -n|--new)
+         ;;
 
-       args[$i]="--new"
+       -n|--new)
 
-       ;;
+         args+=("--new")
 
-     -o|--omit-blanks)
+         ;;
 
-       args[$i]="--omit-blanks"
+       -o|--omit-blanks)
 
-       ;;
+         args+=("--omit-blanks")
 
-     *)
+         ;;
 
-       echo "Wrong argument supplied: ${!i}"
+       *)
 
-       echo "Accepted are --dupes|-d; --new|-n; --omit-blanks|-o"
+         echo "Wrong argument supplied: ${!i}"
 
-       ;;
+         echo "Accepted are --dupes|-d; --new|-n; --omit-blanks|-o"
 
-   esac
+         ;;
+
+     esac
+
+   fi
 
 done
 
@@ -126,11 +145,12 @@ prefix="--"
 argsPrint=""
 
 
-for ((i=1; i<=${#args[@]}; i++)); do
+for ((iv=0; iv<${#args[@]}; iv++)); do
 
-	argsPrint+="_${args[$i]/#$prefix}"
+    argsPrint+="_${args[$iv]/#$prefix}"
 
 done
+
 
 
 echo "languages: $languages"
