@@ -1,22 +1,39 @@
+#############
+### XLEXP ###
+#############
 function xlexp(){
 
-if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]
+if [ "$#" -lt 2 ]
 
   then
 
-    echo "Wrong number of arguments supplied"
+    echo "Directory and language(s) must be supplied"
 
-    echo "usage: xlexp <survey> <xlate languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
 
     return 1
+
+elif [ "$#" -gt 5 ]
+
+  then
+
+    echo "Too many arguments supplied"
+
+    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+
+    return 2
 
 fi
 
 
+dir=$1
 
-third_argument=""
+langs=$2
 
-survey_file_name="$1/survey.xml"
+shift 2
+
+
+survey_file_name="$dir/survey.xml"
 
 searched_word="otherLanguages"
 
@@ -24,9 +41,9 @@ line_with_languages=""
 
 
 
-if [ "$2" != "all" ]; then
+if [ "$langs" != "all" ]; then
 
-  languages="$2"
+  languages="$langs"
 
 else
 
@@ -66,67 +83,80 @@ fi
 
 
 
-if [ -z "$3" ]; then
+declare -a args;
 
-  third_argument=""
 
-else
+for ((i=1; i<=$#; i++)); do 
 
-  case "$3" in
+   case "${!i}" in
 
-    -d|--dupes)
+     -d|--dupes)
 
-      third_argument="--dupes"
+       args[$i]="--dupes"
 
-      ;;
+       ;;
 
-    -n|--new)
+     -n|--new)
 
-      third_argument="--new"
+       args[$i]="--new"
 
-      ;;
+       ;;
 
-    -o|--omit-blanks)
+     -o|--omit-blanks)
 
-      third_argument="--omit-blanks"
+       args[$i]="--omit-blanks"
 
-      ;;
+       ;;
 
-    *)
+     *)
 
-      echo "Wrong arguments supplied"
+       echo "Wrong argument supplied: ${!i}"
 
-      echo "usage: xlexp <survey> <xlate languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+       echo "Accepted are --dupes|-d; --new|-n; --omit-blanks|-o"
 
-      return 2
+       ;;
 
-      ;;
+   esac
 
-  esac
+done
 
-fi
+
+prefix="--"
+
+argsPrint=""
+
+
+for ((i=1; i<=${#args[@]}; i++)); do
+
+	argsPrint+="_${args[$i]/#$prefix}"
+
+done
+
 
 echo "languages: $languages"
+
 
 
 IFS=', ' read -r -a array_with_lang <<< "$languages"
 
 
+ 
+
 for LANG in "${array_with_lang[@]}"
 
 do
 
-  if [ -z "$3" ]; then
+  if [ ${#args[@]} -eq 0 ]; then
 
     echo "xlate for ${LANG}"
 
-    xlate -l ${LANG} $1 ${LANG}.xls
+    xlate -l ${LANG} $dir ${LANG}.xls
 
   else
 
-    echo "xlate for ${LANG} with $third_argument"
+    echo "xlate for ${LANG} with ${args[*]}"
 
-    xlate -l ${LANG} $third_argument $1 ${LANG}_${third_argument:2}.xls
+    xlate ${args[*]} -l ${LANG} $dir ${LANG}${argsPrint}.xls
 
   fi
 
