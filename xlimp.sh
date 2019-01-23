@@ -168,6 +168,8 @@ do
 
   fi;
 
+  unset foundfiles
+
 
   if [ ${#args[@]} -eq 0 ]; then
 
