@@ -147,11 +147,39 @@ prefix="--"
 argsPrint=""
 
 
-for ((iv=0; iv<${#args[@]}; iv++)); do
+echo 'Do you want to specify file name to be inserted after _ ?'
 
-    argsPrint+="_${args[$iv]/#$prefix}"
+read -p 'E.g., date, so the files will be named langusage_<specified_date>.xls (Y|N): ' answervar
 
-done
+  case $answervar in
+
+    [Yy])
+
+      read -p 'Please specify what to be used in names [word|digits|_|- accepted]: ' name_spec
+
+      if [[ $name_spec =~ ^[A-Za-z0-9_-]*$ ]]; then
+
+        argsPrint="_$name_spec"
+
+      else
+
+        echo "Invalid name"
+
+      fi
+
+      ;;
+
+    *)
+
+      for ((iv=0; iv<${#args[@]}; iv++)); do
+
+        argsPrint+="_${args[$iv]/#$prefix}"
+
+      done
+
+      ;;
+
+  esac
 
 
 
