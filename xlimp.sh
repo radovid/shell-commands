@@ -87,6 +87,8 @@ for ((i=1; i<=$#; i++)); do
 
         echo "Accepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o"
 
+        return 3
+
         ;;
 
     esac
@@ -127,10 +129,9 @@ do
   done
 
 
-  declare -a foundfiles;
+  declare -a foundfiles=();
 
   clear_dir="$dir/"
-
 
   for line in $(find $dir -maxdepth 2 -regextype posix-extended -regex ".*?/${element}.(xlsx?|XLSX?)"); do
 
