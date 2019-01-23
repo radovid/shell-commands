@@ -131,6 +131,8 @@ for ((i=1; i<=$#; i++)); do
 
          echo "Accepted are --dupes|-d; --new|-n; --omit-blanks|-o"
 
+         return 3 
+
          ;;
 
      esac
