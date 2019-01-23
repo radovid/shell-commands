@@ -87,6 +87,8 @@ for ((i=1; i<=$#; i++)); do
 
         echo "Accepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o"
 
+        return 3
+
         ;;
 
     esac
@@ -131,7 +133,6 @@ do
 
   clear_dir="$dir/"
 
-
   for line in $(find $dir -maxdepth 2 -regextype posix-extended -regex ".*?/${element}.(xlsx?|XLSX?)"); do
 
     foundfiles+=("${line/#$clear_dir}")
@@ -143,6 +144,7 @@ do
 
   file_name=""
 
+  skip_xlate=false
 
   if [ ${#foundfiles[@]} -gt 1 ];
 
@@ -166,44 +168,58 @@ do
 
      file_name="${foundfiles[0]}";
 
-  fi;
-
-  unset foundfiles
-
-
-  if [ ${#args[@]} -eq 0 ]; then
-
-      echo "file name = ${file_name}, language = ${found_language%_*}"
-
   else
 
-      echo "file name = ${file_name}, language = ${found_language%_*}, ${args[*]}"
+     echo "xlate file with this name wasn't found"
 
-  fi
+     echo "usage: xlimp <survey> <xlate names, separated by ',', without file extension (e.g., .xls)> [--dupes|--unsafe]"
+
+     skip_xlate=true
+
+  fi;
 
 
+  unset foundfiles
+  
 
-  read -p 'Do you want to execute this xlate? (Y|N): ' answervar
+  if [ "$skip_xlate" == false ]; then
 
-  case $answervar in
-
-  [Yy])
 
     if [ ${#args[@]} -eq 0 ]; then
 
-      xlate -l ${found_language%_*} $dir ${file_name} $dir
+        echo "file name = ${file_name}, language = ${found_language%_*}"
 
     else
 
-      xlate ${args[*]} -l ${found_language%_*} $dir ${file_name} $dir
+        echo "file name = ${file_name}, language = ${found_language%_*}, ${args[*]}"
 
     fi
 
-    ;;
 
-  *) continue ;;
 
-  esac
+    read -p 'Do you want to execute this xlate? (Y|N): ' answervar
+
+    case $answervar in
+
+    [Yy])
+
+      if [ ${#args[@]} -eq 0 ]; then
+
+        xlate -l ${found_language%_*} $dir ${file_name} $dir
+
+      else
+
+        xlate ${args[*]} -l ${found_language%_*} $dir ${file_name} $dir
+
+      fi
+
+      ;;
+
+    *) continue ;;
+
+    esac
+
+  fi
 
 done
 
