@@ -147,15 +147,15 @@ prefix="--"
 argsPrint=""
 
 
-echo 'Do you want to specify file name to be inserted after _ ?'
+echo 'Do you want to specify file name to be inserted after language_ ?'
 
-read -p 'E.g., date, so the files will be named langusage_<specified_date>.xls (Y|N): ' answervar
+read -p 'E.g., date, so the files will be named language_<date>.xls (Y|N): ' answervar
 
   case $answervar in
 
     [Yy])
 
-      read -p 'Please specify what to be used in names [word|digits|_|- accepted]: ' name_spec
+      read -p 'Please specify what to be used in file names [word|digits|_- accepted]: ' name_spec
 
       if [[ $name_spec =~ ^[A-Za-z0-9_-]*$ ]]; then
 
@@ -200,7 +200,7 @@ do
 
     echo "xlate for ${LANG}"
 
-    xlate -l ${LANG} $dir ${LANG}.xls
+    xlate -l ${LANG} $dir ${LANG}${argsPrint}.xls
 
   else
 
