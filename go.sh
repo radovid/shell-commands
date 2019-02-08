@@ -7,7 +7,14 @@ declare -- sn=$1;
 
 if [[ $sn =~ trans|temp-|.*\.|.*\/.* ]] ;
  then
- 	cd "$sn";
+   if [ -d "$sn" ]; then 
+     cd "$sn";
+   elif [ -d /home/gmi/v2/"$sn" ]; then
+     cd /home/gmi/v2/"$sn";
+   else
+     echo "Sorry, didn't find where to go!"
+     return 1
+   fi
 else
 
  declare -a found;
@@ -52,6 +59,7 @@ else
     then
       echo "${foundm[0]}";
       cd "${foundm[0]}";
+      
    fi;
 
  fi;
