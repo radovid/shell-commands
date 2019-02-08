@@ -48,6 +48,17 @@ for arg in $@; do
 done
 
 
+if [[ -z $dir || -z $lang ]] ; then
+
+    echo "Directory and language(s) must be supplied"
+
+    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+
+    return 3
+
+fi
+
+
 survey_file_name="$dir/survey.xml"
 
 searched_word="otherLanguages"
@@ -131,7 +142,7 @@ for ((i=1; i<=$#; i++)); do
 
          echo "Accepted are --dupes|-d; --new|-n; --omit-blanks|-o"
 
-         return 3 
+         return 4
 
          ;;
 
