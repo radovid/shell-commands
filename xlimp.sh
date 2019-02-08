@@ -7,7 +7,7 @@ if [ "$#" -lt 2 ]
 
   then
 
-    echo "Directory and language(s) must be supplied"
+    echo "Directory and file names(s) must be supplied"
 
     echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe]"
     return 1
@@ -46,7 +46,15 @@ for arg in $@; do
 done
 
 
+if [[ -z $dir || -z $lang ]] ; then
 
+    echo "Directory and file names(s) must be supplied"
+
+    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+
+    return 3
+
+fi
 
 declare -a args;
 
@@ -87,7 +95,7 @@ for ((i=1; i<=$#; i++)); do
 
         echo "Accepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o"
 
-        return 3
+        return 4
 
         ;;
 
