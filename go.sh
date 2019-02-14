@@ -11,6 +11,8 @@ if [[ $sn =~ trans|temp-|.*\.|.*\/.* ]] ;
      cd "$sn";
    elif [ -d /home/gmi/v2/"$sn" ]; then
      cd /home/gmi/v2/"$sn";
+   elif [ -d /home/gmi/v2/gmi/"$sn" ]; then
+     cd /home/gmi/v2/gmi/"$sn";
    else
      echo "Sorry, didn't find where to go!"
      return 1
