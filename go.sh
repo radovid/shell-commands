@@ -9,10 +9,10 @@ if [[ $sn =~ trans|temp-|.*\.|.*\/.* ]] ;
  then
    if [ -d "$sn" ]; then 
      cd "$sn";
-   elif [ -d /home/gmi/v2/"$sn" ]; then
-     cd /home/gmi/v2/"$sn";
-   elif [ -d /home/gmi/v2/gmi/"$sn" ]; then
-     cd /home/gmi/v2/gmi/"$sn";
+   elif [ -d /home/hermes/v2/"$sn" ]; then
+     cd /home/hermes/v2/"$sn";
+   elif [ -d /home/hermes/v2/gmi/"$sn" ]; then
+     cd /home/hermes/v2/gmi/"$sn";
    else
      echo "Sorry, didn't find where to go!"
      return 1
@@ -20,7 +20,7 @@ if [[ $sn =~ trans|temp-|.*\.|.*\/.* ]] ;
 else
 
  declare -a found;
- for dir in "/home/gmi/v2/gmi/v3/AMS" "/home/gmi/v2/gmi/v2" "/home/gmi/v2/bor/v1/AG" "/home/gmi/v2/lsr/bmr/v3" "/home/gmi/v2/lsr/bmr/v2" "/home/gmi/v2/gmi/v3/AMS/INTERNAL" "/home/gmi/v2/gmi" "/home/gmi/v2/gmi/v2/maps" "/home/gmi/v2/gmi/v3/AMS/NATO" "/home/gmi/v2/gmi/v2/NATO" ; do
+ for dir in "/home/hermes/v2/gmi/v3/AMS" "/home/hermes/v2/gmi/v2" "/home/hermes/v2/bor/v1/AG" "/home/hermes/v2/lsr/bmr/v3" "/home/hermes/v2/lsr/bmr/v2" "/home/hermes/v2/gmi/v3/AMS/INTERNAL" "/home/hermes/v2/gmi" "/home/hermes/v2/gmi/v2/maps" "/home/hermes/v2/gmi/v3/AMS/NATO" "/home/hermes/v2/gmi/v2/NATO" ; do
   if [ -d "$dir/$sn" ];
    then
     found+=("$dir/$sn");
@@ -43,7 +43,7 @@ else
     cd "${found[0]}";
  else
    declare -a foundm;
-   for line in $(find /home/gmi/v2 ! -readable -prune -o -name $sn -a -type d -print); do
+   for line in $(find /home/hermes/v2 ! -readable -prune -o -name $sn -a -type d -print); do
      foundm+=("$line");
    done;
 
