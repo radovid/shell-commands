@@ -11,7 +11,7 @@ If the name is found in more than one of the default directories (e.g., in bor/v
 
 When a path is specified or if going to a temp-dir, `go` works as `cd`. So all cases below are valid:
 
-    go 605158
+    go 91227086
   
     go /home/hermes/v2/gmi/v2/508119
   
