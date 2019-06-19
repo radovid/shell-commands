@@ -48,15 +48,15 @@ for arg in $@; do
 done
 
 
-if [[ -z $dir || -z $lang ]] ; then
+#if [[ -z $dir || -z $lang ]] ; then
 
-    echo "Directory and language(s) must be supplied"
+    #echo "Directory and language(s) must be supplied"
 
-    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+    #echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
 
-    return 3
+#    return 3
 
-fi
+#fi
 
 
 survey_file_name="$dir/survey.xml"
