@@ -7,19 +7,19 @@ if [ "$#" -lt 2 ]
 
   then
 
-    echo "Directory and language(s) must be supplied"
+    echo -e "\e[31mDirectory and language(s) must be supplied\e[39m"
 
-    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+    echo -e "\e[1musage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]\e[22m"
 
     return 1
 
 elif [ "$#" -gt 5 ]
 
   then
+ 
+    echo -e "\e[31mToo many arguments supplied\e[39m"
 
-    echo "Too many arguments supplied"
-
-    echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
+    echo -e "\e[1musage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]\e[22m"
 
     return 2
 
@@ -47,16 +47,6 @@ for arg in $@; do
 
 done
 
-
-#if [[ -z $dir || -z $lang ]] ; then
-
-    #echo "Directory and language(s) must be supplied"
-
-    #echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
-
-#    return 3
-
-#fi
 
 
 survey_file_name="$dir/survey.xml"
@@ -138,9 +128,9 @@ for ((i=1; i<=$#; i++)); do
 
        *)
 
-         echo "Wrong argument supplied: ${!i}"
+         echo -e "\e[1mWrong argument supplied\e[22m: \e[31m${!i}\e[39m"
 
-         echo "Accepted are --dupes|-d; --new|-n; --omit-blanks|-o"
+         echo -e "\e[1mAccepted are --dupes|-d; --new|-n; --omit-blanks|-o\e[22m"
 
          return 4
 
@@ -158,44 +148,61 @@ prefix="--"
 argsPrint=""
 
 
-echo 'Do you want to specify file name to be inserted after language_ ?'
+# echo "Specify tex if you want it to be added after \e[3mlanguage_\e[0m in file name or leave empty for defaults:"
 
-read -p 'E.g., date, so the files will be named language_<date>.xls (Y|N): ' answervar
+# read -p 'E.g., date, so the files will be named language_<date>.xls (Y|N): ' answervar
 
-  case $answervar in
+#   case $answervar in
 
-    [Yy])
+#     [Yy])
 
-      read -p 'Please specify what to be used in file names [word|digits|_- accepted]: ' name_spec
+      echo -e "Specify text to be added after \e[1mlanguage_\e[22m in the xlate names."
 
-      if [[ $name_spec =~ ^[A-Za-z0-9_-]*$ ]]; then
+      read -p  "Or just leave empty and press enter for default names: " name_spec
+		
+	  if [[ -z $name_spec ]]; then
 
-        argsPrint="_$name_spec"
+        for ((iv=0; iv<${#args[@]}; iv++)); do
+
+          argsPrint+="_${args[$iv]/#$prefix}"
+
+        done
+
+      elif [[ ! $name_spec =~ ^[A-Za-z0-9_-]*$ ]]; then
+
+        echo -e "\e[31mInvalid characters entered!\e[39m"
+
+		read -p "Only letters, digits, underscore and hyphen are accepted: " name_spec2
+
+        if [[ $name_spec2 =~ ^[A-Za-z0-9_-]*$ ]]; then
+
+          argsPrint="_$name_spec2"
+
+        fi
 
       else
 
-        echo "Invalid name"
+      	argsPrint="_$name_spec"
 
       fi
 
-      ;;
+  #     ;;
 
-    *)
+  #   *)
 
-      for ((iv=0; iv<${#args[@]}; iv++)); do
+  #     for ((iv=0; iv<${#args[@]}; iv++)); do
 
-        argsPrint+="_${args[$iv]/#$prefix}"
+  #       argsPrint+="_${args[$iv]/#$prefix}"
 
-      done
+  #     done
 
-      ;;
+  #     ;;
 
-  esac
+  # esac
 
 
 
-echo "languages: $languages"
-
+echo -e "\e[1mlanguages\e[22m: $languages"
 
 
 IFS=', ' read -r -a array_with_lang <<< "$languages"
@@ -209,13 +216,13 @@ do
 
   if [ ${#args[@]} -eq 0 ]; then
 
-    echo "xlate for ${LANG}"
+    echo -e "xlate for \e[7m${LANG}\e[27m"
 
     xlate -l ${LANG} $dir ${LANG}${argsPrint}.xls
 
   else
 
-    echo "xlate for ${LANG} with ${args[*]}"
+    echo -e "xlate for \e[7m${LANG}\e[27m with \e[1m${args[*]}\e[22m"
 
     xlate ${args[*]} -l ${LANG} $dir ${LANG}${argsPrint}.xls
 
