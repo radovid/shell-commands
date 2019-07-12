@@ -7,18 +7,18 @@ if [ "$#" -lt 2 ]
 
   then
 
-    echo "Directory and file names(s) must be supplied"
+    echo -e "\e[31mDirectory and file names(s) must be supplied\e[39m"
 
-    echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe]"
+    echo -e "\e[1musage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe]\e[22m"
     return 1
 
 elif [ "$#" -gt 5 ]
 
   then
 
-    echo "Too many arguments supplied"
+    echo -e "\e[31mToo many arguments supplied\e[39m"
 
-    echo "usage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe]"
+    echo -e "\e[1musage: xlimp <survey> <xlate names, separated by ','> [--dupes|--unsafe]\e[22m"
 
     return 2
 
@@ -45,16 +45,6 @@ for arg in $@; do
 
 done
 
-
-#if [[ -z $dir || -z $lang ]] ; then
-
- #   echo "Directory and file names(s) must be supplied"
-
-  #  echo "usage: xlexp <survey> <languages, separated by ','|all> [--dupes|--new|--omit-blanks]"
-
-   # return 3
-
-#fi
 
 declare -a args;
 
@@ -91,9 +81,9 @@ for ((i=1; i<=$#; i++)); do
 
       *)
 
-        echo "Wrong argument supplied: ${!i}"
+        echo -e "\e[1mWrong argument supplied\e[22m: \e[31m${!i}\e[39m"
 
-        echo "Accepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o"
+        echo -e "\e[1mAccepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o\e[22m"
 
         return 4
 
@@ -118,6 +108,11 @@ for element in "${supplied_langs[@]}"
 
 do
 
+  element=${element%.xlsx}
+  element=${element%.XLSX}
+  element=${element%.xls}
+  element=${element%.XLS}
+
   found_language=${element}
 
   for each_language in "${languages_array[@]}"
@@ -136,10 +131,11 @@ do
 
   done
 
-
+ 
   declare -a foundfiles=();
 
   clear_dir="$dir/"
+
 
   for line in $(find $dir -maxdepth 2 -regextype posix-extended -regex ".*?/${element}.(xlsx?|XLSX?)"); do
 
@@ -178,9 +174,9 @@ do
 
   else
 
-     echo "xlate file with this name wasn't found"
+     echo -e "\e[31mxlate file with this name wasn't found\e[39m"
 
-     echo "usage: xlimp <survey> <xlate names, separated by ',', without file extension (e.g., .xls)> [--dupes|--unsafe]"
+     echo -e "\e[1musage: xlimp <survey> <xlate (file) names, separated by ','> [--dupes|--unsafe]\e[22m"
 
      skip_xlate=true
 
@@ -190,11 +186,11 @@ do
 
     if [ ${#args[@]} -eq 0 ]; then
 
-        echo "file name = ${file_name}, language = ${found_language%_*}"
+        echo -e "file name = \e[7m${file_name}\e[27m, language = \e[1m${found_language%_*}\e[22m"
 
     else
 
-        echo "file name = ${file_name}, language = ${found_language%_*}, ${args[*]}"
+        echo -e "file name = \e[7m${file_name}\e[27m, language = \e[1m${found_language%_*}\e[22m, \e[1m${args[*]}\e[22m"
 
     fi
 
