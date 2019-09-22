@@ -3,12 +3,12 @@
 ############
 function go(){
 
+declare -- BO=$'\e[1m';
+declare -- BC=$'\e[22m';
+
 declare -- name=$1;
 declare -a found;
 declare -- idx=0;
-
-declare -- BO=$'\e[1m';
-declare -- BC=$'\e[22m';
 
 #if [[ $name =~ trans|temp-|.*\.|.*\/.* ]] ;
 
@@ -43,7 +43,7 @@ else
     then
       for item in ${found[@]};  do
         idx=$((idx+1));
-        echo -e "${BO}$idx:${BC} \e[4m$item\e[24m";
+        echo "${BO}$idx:${BC} ${UO}$item${UC}";
       done;
       read -p "${BO}Enter the number of the directory to go to:${BC} " dirNum
 
