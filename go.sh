@@ -18,7 +18,7 @@ elif [ -d /home/hermes/v2/"$name" ]; then
    echo "${BO}Going to /home/hermes/v2/$name${BC}";
    cd /home/hermes/v2/"$name";
 
-elif [ -d /home/hermes/v2/gmi/"$name" ]; then
+elif [ -d /home/hermes/v2/bor/"$name" ]; then
    echo "${BO}Going to /home/hermes/v2/gmi/$name${BC}";
    cd /home/hermes/v2/gmi/"$name";
 
@@ -28,7 +28,7 @@ elif [ -d /home/hermes/v2/selfserve/"$name" ]; then
 
 else
 
-  for dir in "." "/home/hermes/v2/gmi/v3/AMS" "/home/hermes/v2/gmi/v2" "/home/hermes/v2/bor/v1/AG" "/home/hermes/v2/lsr/bmr/AG" "/home/hermes/v2/lsr/bmr/v3" "/home/hermes/v2/lsr/bmr/v2" "/home/hermes/v2/gmi/v3/AMS/INTERNAL" "/home/hermes/v2/gmi" "/home/hermes/v2/gmi/v2/maps" "/home/hermes/v2/gmi/v3/AMS/NATO" "/home/hermes/v2/gmi/v2/NATO" ; do
+  for dir in "." "/home/hermes/v2/bor/v3/AMS" "/home/hermes/v2/bor/v3/EMEA" "/home/hermes/v2/bor/v3/APAC" "/home/hermes/v2/lsh/v1/emea" "/home/hermes/v2/lsh/v1/ams" "/home/hermes/v2/lsh/v1/apac" "/home/hermes/v2/lsh/v1/lp/emea" "/home/hermes/v2/lsh/v1/lp/ams" ; do
     if [ -d "$dir/$name" ];
      then
       found+=("$dir/$name");
