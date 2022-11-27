@@ -1,3 +1,4 @@
+
 #############
 ### XLEXP ###
 #############
@@ -51,7 +52,7 @@ done
 
 survey_file_name="$dir/survey.xml"
 
-searched_word="otherLanguages"
+searched_word="otherLanguages="
 
 line_with_languages=""
 
@@ -70,16 +71,13 @@ else
     if [[ $line = *$searched_word* ]]; then
 
       line_with_languages=$line
-
+    
     fi
 
   done < $survey_file_name
 
 
-
   IFS='"' read -r -a delim_array <<< "$line_with_languages"
-
-
 
   for index in "${!delim_array[@]}"
 
@@ -106,27 +104,7 @@ for ((i=1; i<=$#; i++)); do
 
    if [[ "${!i}" =~ ^--?.* ]] ; then
 
-     case "${!i}" in
-
-       -d|--dupes)
-
-         args+=("--dupes")
-
-         ;;
-
-       -n|--new)
-
-         args+=("--new")
-
-         ;;
-
-       -o|--omit-blanks)
-
-         args+=("--omit-blanks")
-
-         ;;
-
-       *)
+       if [[ ! ${!i} =~ ^--dupes|--new|--omit-blanks|-[dno]+$ ]]; then
 
          echo -e "\e[1mWrong argument supplied\e[22m: \e[31m${!i}\e[39m"
 
@@ -134,9 +112,27 @@ for ((i=1; i<=$#; i++)); do
 
          return 4
 
-         ;;
+       fi
 
-     esac
+
+       if [[ ${!i} =~ ^-d|--dupes|-[no]*d[no]*$ ]]; then
+
+         args+=("--dupes")
+
+       fi
+
+       if [[ ${!i} =~ ^-n|--new|-[do]*n[do]*$ ]]; then
+
+         args+=("--new")
+
+       fi
+
+
+       if [[ ${!i} =~ ^-o|--omit-blanks|-[dn]*o[dn]*$ ]]; then
+
+         args+=("--omit-blanks")
+
+       fi
 
    fi
 
@@ -156,15 +152,19 @@ argsPrint=""
 
 #     [Yy])
 
-      echo -e "Specify text to be added after \e[1mlanguage_\e[22m in the xlate names."
+    echo -e "Specify text to be added after \e[1mlanguage_\e[22m in the xlate names."
 
-      read -p  "Or just leave empty and press enter for default names: " name_spec
+    read -p  "Or just leave empty and press enter for default names: " name_spec
 		
 	  if [[ -z $name_spec ]]; then
 
         for ((iv=0; iv<${#args[@]}; iv++)); do
 
-          argsPrint+="_${args[$iv]/#$prefix}"
+          if [[ ! ${args[iv]} = "--omit-blanks" ]]; then
+
+            argsPrint+="_${args[$iv]/#$prefix}"
+
+          fi
 
         done
 
@@ -172,7 +172,7 @@ argsPrint=""
 
         echo -e "\e[31mInvalid characters entered!\e[39m"
 
-		read -p "Only letters, digits, underscore and hyphen are accepted: " name_spec2
+		    read -p "Only letters, digits, underscore and hyphen are accepted: " name_spec2
 
         if [[ $name_spec2 =~ ^[A-Za-z0-9_-]*$ ]]; then
 
@@ -184,7 +184,7 @@ argsPrint=""
 
       	argsPrint="_$name_spec"
 
-      fi
+    fi
 
   #     ;;
 
