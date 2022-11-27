@@ -49,54 +49,55 @@ done
 declare -a args;
 
 
+
 for ((i=1; i<=$#; i++)); do 
 
-    if [[ "${!i}" =~ ^--?.* ]] ; then
+   if [[ "${!i}" =~ ^--?.* ]] ; then
 
-      case "${!i}" in
+       if [[ ! ${!i} =~ ^--dupes|--new|--omit-blanks|-[dnou]+$ ]]; then
 
-        -d|--dupes)
+         echo -e "\e[1mWrong argument supplied\e[22m: \e[31m${!i}\e[39m"
 
-        args+=("--dupes")
+         echo -e "\e[1mAccepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o\e[22m"
 
-        ;;
+         return 4
 
-      -n|--new)
+       fi
+       
 
-        args+=("--new")
+       if [[ ${!i} =~ ^-d|--dupes|-[nou]*d[nou]*$ ]]; then
 
-        ;;
+         args+=("--dupes")
 
-      -o|--omit-blanks)
+       fi
 
-        args+=("--omit-blanks")
+       if [[ ${!i} =~ ^-n|--new|-[dou]*n[dou]*$ ]]; then
 
-        ;;
+         args+=("--new")
 
-      -u|--unsafe)
+       fi
 
-        args+=("--unsafe")
 
-        ;;
+       if [[ ${!i} =~ ^-o|--omit-blanks|-[dnu]*o[dnu]*$ ]]; then
 
-      *)
+         args+=("--omit-blanks")
 
-        echo -e "\e[1mWrong argument supplied\e[22m: \e[31m${!i}\e[39m"
+       fi
 
-        echo -e "\e[1mAccepted are --dupes|-d; --unsafe|-u; --new|-n; --omit-blanks|-o\e[22m"
+       if [[ ${!i} =~ ^-u|--unsafe|-[dno]*u[dno]*$ ]]; then
 
-        return 4
+         args+=("--unsafe")
 
-        ;;
+       fi
 
-    esac
-
-  fi
+   fi
 
 done
 
 
-declare -a languages_array=("arabic_egypt" "arabic_lebanon" "arabic_morocco" "arabic_qatar" "arabic_saudiarabia" "arabic_uae" "french_belgium" "french_lu" "french_ch" "german_austria" "german_lu" "german_ch" "dutch_belgium" "malay_sg" "portuguese_br" "simplifiedchinese_my" "simplifiedchinese_sg" "spanish_brazil" "spanish_chile" "spanish_colombia" "spanish_ecuador" "spanish_eu" "spanish_peru" "spanish_venezuela" "spanish_latin" "spanish_mexico" "spanish_south" "traditionalchinese_tw" "english_ca" "english_china" "english_g1" "english_g2" "english_g3" "english_g4" "english_hk" "english_id" "english_india" "english_ireland" "english_my" "english_nigeria" "english_sg" "english_tw" "english_za" "danish.utf8" "english.utf8" "italian.utf8" "spanish.utf8" "albanian" "arabic" "azerbaijani" "bulgarian" "canadian" "croatian" "czech" "danish" "dutch" "english" "estonian" "finnish" "french" "georgian" "german" "greek" "hebrew" "hindi" "hungarian" "icelandic" "indonesian" "italian" "japanese" "khmer" "korean" "latvian" "lithuanian" "macedonian" "malay" "mongolian" "persian" "polish" "portuguese" "romanian" "russian" "serbian" "simplifiedchinese" "slovak" "slovene" "spanish" "spanish_argentina" "swahili" "swedish" "tagalog" "thai" "traditionalchinese" "turkish" "uk" "aus" "ukrainian" "urdu" "vietnamese")
+
+
+declare -a languages_array=("afrikaans" "albanian" "arabic" "arabic_egypt" "arabic_lebanon" "arabic_morocco" "arabic_qatar" "arabic_saudiarabia" "arabic_uae" "assamese" "azerbaijani" "bengali" "bulgarian" "burmese" "canadian" "chinese" "croatian" "czech" "danish" "danish.utf8" "dutch" "dutch_belgium" "english.utf8" "estonian" "finnish" "french" "french_belgium" "french_lu" "french_ch" "georgian" "german" "german_austria" "german_lu" "german_ch" "greek" "gujarati" "hebrew" "hindi" "hungarian" "icelandic" "indonesian" "italian" "italian.utf8" "italian_ch" "japanese" "kannada" "kazakh" "khmer" "korean" "latvian" "lithuanian" "macedonian" "malay" "malay_sg" "malayalam" "maltese" "marathi" "mongolian" "norwegian" "oriya" "persian" "polish" "portuguese" "portuguese_br" "punjabi" "romanian" "russian" "samoan" "serbian" "simplifiedchinese" "simplifiedchinese_my" "simplifiedchinese_sg" "slovak" "slovene" "slovenian" "spanish" "spanish.utf8" "spanish_argentina" "spanish_brazil" "spanish_chile" "spanish_colombia" "spanish_ecuador" "spanish_eu" "spanish_peru" "spanish_venezuela" "spanish_latin" "spanish_mexico " "spanish_south" "swahili" "swedish" "tagalog" "tamil" "telugu" "thai" "tongan" "traditionalchinese" "traditionalchinese_tw" "turkish" "uk" "aus" "english_ca" "english_china" "english_g1" "english_g2" "english_g3" "english_g4" "english_hk" "english_id" "english_india" "english_ireland" "english_my" "english_nigeria" "english_sg" "english_tw" "english_za" "ukrainian" "urdu" "urdu_india" "vietnamese" "welsh")
 
 
 
@@ -124,8 +125,6 @@ do
       found_language=${each_language}
 
       found_language="${found_language}_"
-
-      break;
 
     fi
 
